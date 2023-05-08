@@ -20,8 +20,9 @@
 - Configuration
   - read
   - respect
-  - ability to set which to show in popup window
-  - ability to set which to match against
+  - ability to set which to show in popup window in settings
+  - ability to set which to match against in settings
+  - ability to enable/disable in settings
 
 # ---------------------
 
