@@ -2,21 +2,19 @@
 
 # TODO
 
-- Write tests for matching with regex
+- Write tests for matching with regex (will be faster, than always hovering over, since I got the hovering logic finished already)
 - Match numbers
   - whole
   - decimal
   - binary
   - hex
-  - fraction
-  - exponent
+  - decimal exponential notation (e or ^)
 - Show window with alternative representations
   - whole
   - decimal
   - binary
   - hex
-  - fraction
-  - exponent
+  - decimal exponential notation (e or ^)
 - Configuration
   - read
   - respect
