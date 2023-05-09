@@ -20,7 +20,9 @@ export default class NumberHoverProvider implements vscode.HoverProvider {
       position,
       new RegExp(this.regex_match_whole_number)
     );
-    console.log("TODO: Set breakpoint here");
-    throw new Error("Method not implemented.");
+    const text = document.getText(match);
+    console.log(text);
+
+    return new vscode.Hover("sljea");
   }
 }
