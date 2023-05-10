@@ -10,8 +10,7 @@
   - hex
   - decimal exponential notation (e or ^)
 - Show window with alternative representations
-  - whole
-  - decimal
+  - normal (whole/decimal)
   - binary
   - hex
   - decimal exponential notation (e or ^)
@@ -21,6 +20,7 @@
   - ability to set which to show in popup window in settings
   - ability to set which to match against in settings
   - ability to enable/disable in settings
+- Cleanup useless files and readme
 
 # ---------------------
 

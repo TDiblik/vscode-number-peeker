@@ -40,7 +40,12 @@ suite("Whole number matching", () => {
     });
   }
 
-  const failing_cases = ["Infinity", "-Infinity", "NaN"];
+  const failing_cases = [
+    "Infinity",
+    "-Infinity",
+    "NaN",
+    'const example_string_number = "abc";',
+  ];
   for (const failing_case of failing_cases) {
     const matching_provider = new NumberHoverProvider();
     test(`${failing_case} should fail to match`, () => {
@@ -52,18 +57,54 @@ suite("Whole number matching", () => {
   }
 });
 
+// Does not work
 suite("Value translations", () => {
   const success_cases = [
     {
-      value: 0x0,
-      desired_dicimal_representation: "0",
-      desired_binary_representation: "00000000",
-      desired_hex_representation: "0x00",
+      value: 0,
+      expected_binary_representation: "00000000",
+      expected_hex_representation: "0x00",
     },
+    {
+      value: 1,
+      expected_binary_representation: "00000001",
+      expected_hex_representation: "0x01",
+    },
+    {
+      value: 10,
+      expected_binary_representation: "00001010",
+      expected_hex_representation: "0x0A",
+    },
+    {
+      value: 1234,
+      expected_binary_representation: "00000100 11010010",
+      expected_hex_representation: "0x04 0xD2",
+    },
+
+    {
+      value: -32769,
+      expected_binary_representation: "10000000 00000000 00000000 00000000",
+      expected_hex_representation: "0x80 0x00 0x00 0x00",
+    },
+    // {
+    //   value: -2147483648,
+    //   expected_binary_representation: "10000000 00000000 00000000 00000000",
+    //   expected_hex_representation: "0x80 0x00 0x00 0x00",
+    // },
   ];
 
   for (const success_case of success_cases) {
-    const number_matcher = new MockMatcher();
+    const number_matcher = new MockMatcher(
+      success_case.value.toString(),
+      success_case.expected_binary_representation,
+      success_case.expected_hex_representation
+    );
     number_matcher.force_set_value(success_case.value);
+    test(`${success_case.value} should output expected representations (${success_case.value} ; ${success_case.expected_binary_representation} ; ${success_case.expected_hex_representation})`, () => {
+      assert.strictEqual(
+        number_matcher.build_dialog_text(),
+        number_matcher.build_expected_output()
+      );
+    });
   }
 });

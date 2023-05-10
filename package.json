@@ -5,6 +5,11 @@
   "version": "0.0.1",
   "license": "./LICENSE",
   "publisher": "TDiblik",
+  "author": {
+    "name": "Tomáš Diblík",
+    "email": "dibla.tomas@post.cz",
+    "url": "https://tomasdiblik.cz"
+  },
   "categories": [
     "Visualization",
     "Other"
