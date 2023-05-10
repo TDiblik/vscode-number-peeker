@@ -1,9 +1,5 @@
 import * as vscode from "vscode";
-import {
-  BinaryNumberMatcher,
-  NumberMatcherBase,
-  WholeNumberMatcher,
-} from "./NumberMatchers";
+import { NumberMatcher } from "./NumberMatchers";
 
 export default class NumberHoverProvider implements vscode.HoverProvider {
   public regex_match_decimal = `TODO`;
@@ -12,11 +8,11 @@ export default class NumberHoverProvider implements vscode.HoverProvider {
   public regex_match_fraction = `TODO`;
   public regex_match_exponent = `TODO`;
 
-  public whole_number_matcher = new WholeNumberMatcher(/(\-)?\b\d+\b/gim);
-  public binary_number_matcher = new BinaryNumberMatcher(/TODO/gim);
+  public whole_number_matcher = new NumberMatcher(/(\-)?\b\d+\b/gim);
+  public binary_number_matcher = new NumberMatcher(/TODO/gim);
 
   // Ordered by importance
-  public all_matchers: NumberMatcherBase[] = [
+  public all_matchers: NumberMatcher[] = [
     this.binary_number_matcher,
     this.whole_number_matcher,
   ];

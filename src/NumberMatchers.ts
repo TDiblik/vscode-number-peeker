@@ -1,8 +1,8 @@
 import * as vscode from "vscode";
 
 // Used classes to keep things separated and intialize regex only once (in the construtor).
-export abstract class NumberMatcherBase {
-  protected regex: RegExp;
+export class NumberMatcher {
+  public readonly regex: RegExp;
   protected value: number | null = null;
 
   // TODO: Take config as parameter
@@ -131,5 +131,20 @@ function piece_back_together_splitted_representation(
   return formatted_representation;
 }
 
-export class WholeNumberMatcher extends NumberMatcherBase {}
-export class BinaryNumberMatcher extends NumberMatcherBase {}
+export class MockMatcher extends NumberMatcher {
+  constructor() {
+    super(/DOES_NOT_MATTER/);
+  }
+
+  public force_set_value(value: number) {
+    this.value = value;
+  }
+
+  public build_fake_output() {
+    return `
+${this.build_decimal()}\n
+${this.build_binary()}\n
+${this.build_hex()}\n
+    `;
+  }
+}
