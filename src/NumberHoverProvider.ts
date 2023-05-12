@@ -22,6 +22,10 @@ export default class NumberHoverProvider implements vscode.HoverProvider {
     position: vscode.Position,
     token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.Hover> {
+    if (!this.config.enabled) {
+      return;
+    }
+
     let hover_text: string | null = null;
     for (const matcher of this.all_matchers) {
       if (matcher.match(document, position)) {

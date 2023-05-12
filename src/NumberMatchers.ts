@@ -134,24 +134,37 @@ export class NumberMatcher {
     return hex_representation;
   }
 
-  // protected build_exponential() {
-  //   return this.value!.toExponential();
-  // }
+  protected build_exponential() {
+    return this.value!.toExponential();
+  }
 
   protected build_preview_item(name: string, value: string) {
     return `\n\n**${name}:** ${value}`;
   }
 
   public build_dialog_text(config: Config) {
-    let dialog_text = this.build_preview_item(
-      "Decimal",
-      this.build_decimal().trim()
-    );
-    dialog_text += this.build_binary(config);
-    dialog_text += this.build_preview_item(
-      "Hex",
-      this.build_hex(config).trim()
-    );
+    let dialog_text = "";
+    if (config.decimal_show) {
+      dialog_text += this.build_preview_item(
+        "Decimal",
+        this.build_decimal().trim()
+      );
+    }
+    if (config.binary_show) {
+      dialog_text += this.build_binary(config);
+    }
+    if (config.hex_show) {
+      dialog_text += this.build_preview_item(
+        "Hex",
+        this.build_hex(config).trim()
+      );
+    }
+    if (config.exponential_show) {
+      dialog_text += this.build_preview_item(
+        "Exponential",
+        this.build_exponential().trim()
+      );
+    }
     return dialog_text;
   }
 }

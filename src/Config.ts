@@ -1,6 +1,11 @@
 import * as vscode from "vscode";
 
 export interface Config {
+  enabled: boolean;
+
+  decimal_show: boolean;
+
+  binary_show: boolean;
   binary_showUnsignedWhenPossible: boolean;
   binary_showI8WhenPossible: boolean;
   binary_showI16WhenPossible: boolean;
@@ -9,15 +14,27 @@ export interface Config {
   binary_splitEveryN: number;
   binary_padding: boolean;
 
+  hex_show: boolean;
   hex_showUpercased: boolean;
   hex_trimTrailingFs: boolean;
   hex_prependZeroWhenPossible: boolean;
   hex_show0xBeforeHex: boolean;
+
+  exponential_show: boolean;
 }
 
 export function get_config(): Config {
   let workspace_config = vscode.workspace.getConfiguration();
   let current_config: Config = {
+    enabled: get_bool(workspace_config, "number-peeker.enabled", true),
+
+    decimal_show: get_bool(
+      workspace_config,
+      "number-peeker.decimal.show",
+      true
+    ),
+
+    binary_show: get_bool(workspace_config, "number-peeker.binary.show", true),
     binary_showUnsignedWhenPossible: get_bool(
       workspace_config,
       "number-peeker.binary.showUnsignedWhenPossible",
@@ -54,6 +71,7 @@ export function get_config(): Config {
       true
     ),
 
+    hex_show: get_bool(workspace_config, "number-peeker.hex.show", true),
     hex_showUpercased: get_bool(
       workspace_config,
       "number-peeker.hex.showUpercased",
@@ -73,6 +91,12 @@ export function get_config(): Config {
       workspace_config,
       "number-peeker.hex.show0xBeforeHex",
       true
+    ),
+
+    exponential_show: get_bool(
+      workspace_config,
+      "number-peeker.exponential.show",
+      false
     ),
   };
   return current_config;

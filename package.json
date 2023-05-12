@@ -25,22 +25,37 @@
     "configuration": {
       "title": "Number Peeker",
       "properties": {
+        "number-peeker.enabled": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether this extension should be enabled (work). This setting is here, whenever you want to temporally disable this extension without removing it."
+        },
+        "number-peeker.decimal.show": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show decimal representation on hover"
+        },
+        "number-peeker.binary.show": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show binary representation on hover"
+        },
         "number-peeker.binary.showUnsignedWhenPossible": {
           "type": "boolean",
           "default": true,
           "markdownDescription": "Whether to show usigned representation whenever user hovers over positive number"
         },
-        "number-peekeer.binary.showI8WhenPossible": {
+        "number-peeker.binary.showI8WhenPossible": {
           "type": "boolean",
           "default": false,
           "markdownDescription": "Whether to show usigned 8 bit representation whenever user hovers over negative number"
         },
-        "number-peekeer.binary.showI16WhenPossible": {
+        "number-peeker.binary.showI16WhenPossible": {
           "type": "boolean",
           "default": false,
           "markdownDescription": "Whether to show usigned 16 bit representation whenever user hovers over negative number"
         },
-        "number-peekeer.binary.showI32WhenPossible": {
+        "number-peeker.binary.showI32WhenPossible": {
           "type": "boolean",
           "default": true,
           "markdownDescription": "Whether to show usigned 32 bit representation whenever user hovers over negative number"
@@ -53,12 +68,17 @@
         "number-peeker.binary.splitNumbersEveryN": {
           "type": "integer",
           "default": 8,
-          "markdownDescription": "How many numbers to should be in one group, before getting splitted by space. If you don't want to split every N characters, just set this value really high, like 99999.. If you don't want to split every N characters, just set this value really high, like 99999 (and set number-peeker.binary.padding to false!)."
+          "markdownDescription": "How many numbers to should be in one group, before getting splitted by space. If you don't want to split every N characters, just set this value really high, like 99999.. If you don't want to split every N characters, just set this value really high, like 99999 (and set number-peeker.binary.padding to false!)"
         },
         "number-peeker.binary.padding": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Whether to add padding (zeros -- '0') to splitted binary numbers."
+          "markdownDescription": "Whether to add padding (zeros -- '0') to splitted binary numbers"
+        },
+        "number-peeker.hex.show": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show hexadecimal representation on hover"
         },
         "number-peeker.hex.showUpercased": {
           "type": "boolean",
@@ -79,6 +99,11 @@
           "type": "boolean",
           "default": true,
           "markdownDescription": "Show '0x' before hex numbers, just to make it pretier :D"
+        },
+        "number-peeker.exponential.show": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Show exponential representation of the number."
         }
       }
     },
