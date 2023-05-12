@@ -1,27 +1,51 @@
 import * as vscode from "vscode";
 
 export interface Config {
-  showI8WhenPossible: boolean;
-  showI16WhenPossible: boolean;
-  showI32WhenPossible: boolean;
+  binary_showUnsignedWhenPossible: boolean;
+  binary_showI8WhenPossible: boolean;
+  binary_showI16WhenPossible: boolean;
+  binary_showI32WhenPossible: boolean;
+  binary_showWarningWhenNumberOutsideOfRange: boolean;
+  binary_splitEveryN: number;
+  binary_padding: boolean;
 }
 
 export function get_config(): Config {
   let workspace_config = vscode.workspace.getConfiguration();
   let current_config: Config = {
-    showI8WhenPossible: get_bool(
+    binary_showUnsignedWhenPossible: get_bool(
+      workspace_config,
+      "number-peeker.binary.showUnsignedWhenPossible",
+      true
+    ),
+    binary_showI8WhenPossible: get_bool(
       workspace_config,
       "number-peekeer.binary.showI8WhenPossible",
       false
     ),
-    showI16WhenPossible: get_bool(
+    binary_showI16WhenPossible: get_bool(
       workspace_config,
       "number-peekeer.binary.showI16WhenPossible",
       false
     ),
-    showI32WhenPossible: get_bool(
+    binary_showI32WhenPossible: get_bool(
       workspace_config,
       "number-peekeer.binary.showI32WhenPossible",
+      true
+    ),
+    binary_showWarningWhenNumberOutsideOfRange: get_bool(
+      workspace_config,
+      "number-peeker.binary.showWarningWhenNumberOutsideOfRange",
+      true
+    ),
+    binary_splitEveryN: get_positive_int(
+      workspace_config,
+      "number-peeker.binary.splitNumbersEveryN",
+      8
+    ),
+    binary_padding: get_bool(
+      workspace_config,
+      "number-peekeer.binary.padding",
       true
     ),
   };
@@ -34,4 +58,13 @@ function get_bool(
   default_value: boolean
 ) {
   return workspace_config.get<boolean>(name) ?? default_value;
+}
+
+function get_positive_int(
+  workspace_config: vscode.WorkspaceConfiguration,
+  name: string,
+  default_value: number
+) {
+  let value = workspace_config.get<number>(name) ?? default_value;
+  return value >= 0 ? value : default_value;
 }

@@ -38,14 +38,19 @@ export class NumberMatcher {
     const v = this.value!;
 
     if (v >= 0) {
-      const unsigned_representation = this.build_binary_logic(v.toString(2));
+      if (!config.binary_showUnsignedWhenPossible) {
+        return "";
+      }
       return this.build_preview_item(
         "Binary (unsigned)",
-        unsigned_representation.trim()
+        this.build_binary_logic(v.toString(2), config).trim()
       );
     }
 
     if (v > 2147483647 || v < -2147483648) {
+      if (!config.binary_showWarningWhenNumberOutsideOfRange) {
+        return "";
+      }
       return this.build_preview_item(
         "Binary",
         "Currentlly unable to work with >32 bit numbers."
@@ -57,43 +62,42 @@ export class NumberMatcher {
 
     // TODO: Do the same thing for i64 and i128
     let text = "";
-    if (config.showI8WhenPossible && v >= -128) {
+    if (config.binary_showI8WhenPossible && v >= -128) {
       text += this.build_preview_item(
         "Binary (signed 8)",
-        this.build_binary_logic(v_i32.toString(2).substring(24)).trim()
+        this.build_binary_logic(v_i32.toString(2).substring(24), config).trim()
       );
     }
-    if (config.showI16WhenPossible && v >= -32768) {
+    if (config.binary_showI16WhenPossible && v >= -32768) {
       text += this.build_preview_item(
         "Binary (signed 16)",
-        this.build_binary_logic(v_i32.toString(2).substring(16)).trim()
+        this.build_binary_logic(v_i32.toString(2).substring(16), config).trim()
       );
     }
-    if (config.showI32WhenPossible && v >= -2147483648) {
+    if (config.binary_showI32WhenPossible && v >= -2147483648) {
       text += this.build_preview_item(
         "Binary (signed 32)",
-        this.build_binary_logic(v_i32.toString(2)).trim()
+        this.build_binary_logic(v_i32.toString(2), config).trim()
       );
     }
 
     return text;
   }
 
-  private build_binary_logic(binary_representation: string) {
-    // TODO: Ability to set how many binary numbers you want to show before space
-    const split_every_n = 8;
+  private build_binary_logic(binary_representation: string, config: Config) {
+    const split_every_n = config.binary_splitEveryN;
 
     let splitted_representation = split_into_reversed_arr(
       binary_representation,
       split_every_n
     );
 
-    // TODO: Ability to set whether you want padding on binary numbers
-    splitted_representation.push(
-      splitted_representation.pop()!.padStart(split_every_n, "0")
-    );
+    if (config.binary_padding) {
+      splitted_representation.push(
+        splitted_representation.pop()!.padStart(split_every_n, "0")
+      );
+    }
 
-    // TODO: Ability to set whether you want binary numbers to be separated by space
     const formatted_representation =
       piece_back_together_splitted_representation(splitted_representation, " ");
 
@@ -101,10 +105,22 @@ export class NumberMatcher {
   }
 
   protected build_hex() {
-    const hex_representation =
+    let hex_representation =
       this.value! >= 0
-        ? this.build_hex_logic(this.value!.toString(16))
-        : this.build_hex_logic((this.value! >>> 0).toString(16));
+        ? this.value!.toString(16)
+        : (this.value! >>> 0).toString(16);
+
+    // TODO: Ability to set whether you want to show hex characters upercased
+    hex_representation = hex_representation.toUpperCase();
+
+    // TODO: Ability to set whether you want to prepand zero on hex numbers
+    if (hex_representation.length < 2) {
+      hex_representation = "0" + hex_representation;
+    }
+
+    // TODO: Ability to set whether you want to show 0x
+    hex_representation = "0x" + hex_representation;
+
     return hex_representation;
   }
 

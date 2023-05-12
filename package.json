@@ -25,20 +25,40 @@
     "configuration": {
       "title": "Number Peeker",
       "properties": {
+        "number-peeker.binary.showUnsignedWhenPossible": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show usigned representation whenever user hovers over positive number"
+        },
         "number-peekeer.binary.showI8WhenPossible": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Whether to show usigned 8 bit representation wheneveer user hovers over negative number"
+          "markdownDescription": "Whether to show usigned 8 bit representation whenever user hovers over negative number"
         },
         "number-peekeer.binary.showI16WhenPossible": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Whether to show usigned 16 bit representation wheneveer user hovers over negative number"
+          "markdownDescription": "Whether to show usigned 16 bit representation whenever user hovers over negative number"
         },
         "number-peekeer.binary.showI32WhenPossible": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Whether to show usigned 32 bit representation wheneveer user hovers over negative number"
+          "markdownDescription": "Whether to show usigned 32 bit representation whenever user hovers over negative number"
+        },
+        "number-peeker.binary.showWarningWhenNumberOutsideOfRange": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show warning that number is outside of the supported range of numbers (currentlly u32 and i32)"
+        },
+        "number-peeker.binary.splitNumbersEveryN": {
+          "type": "integer",
+          "default": 8,
+          "markdownDescription": "How many numbers to should be in one group, before getting splitted by space. If you don't want to split every N characters, just set this value really high, like 99999.. If you don't want to split every N characters, just set this value really high, like 99999 (and set number-peeker.binary.padding to false!)."
+        },
+        "number-peeker.binary.padding": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to add padding (zeros -- '0') to splitted binary numbers."
         }
       }
     },
