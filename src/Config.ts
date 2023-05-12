@@ -8,6 +8,11 @@ export interface Config {
   binary_showWarningWhenNumberOutsideOfRange: boolean;
   binary_splitEveryN: number;
   binary_padding: boolean;
+
+  hex_showUpercased: boolean;
+  hex_trimTrailingFs: boolean;
+  hex_prependZeroWhenPossible: boolean;
+  hex_show0xBeforeHex: boolean;
 }
 
 export function get_config(): Config {
@@ -46,6 +51,27 @@ export function get_config(): Config {
     binary_padding: get_bool(
       workspace_config,
       "number-peekeer.binary.padding",
+      true
+    ),
+
+    hex_showUpercased: get_bool(
+      workspace_config,
+      "number-peeker.hex.showUpercased",
+      false
+    ),
+    hex_trimTrailingFs: get_bool(
+      workspace_config,
+      "number-peeker.hex.trimTrailingFs",
+      true
+    ),
+    hex_prependZeroWhenPossible: get_bool(
+      workspace_config,
+      "number-peeker.hex.prependZeroWhenPossible",
+      true
+    ),
+    hex_show0xBeforeHex: get_bool(
+      workspace_config,
+      "number-peeker.hex.show0xBeforeHex",
       true
     ),
   };

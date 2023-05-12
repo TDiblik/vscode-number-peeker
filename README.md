@@ -22,6 +22,14 @@
   - ability to enable/disable in settings
 - Cleanup useless files and readme
 
+# Dev
+
+Total cleanup (make sure to have VSCode closed)
+
+```
+npm cache clean --force && rm -rf node_modules/ .vscode-test/ out/ && npm i && npm run test
+```
+
 # ---------------------
 
 # vscode-number-peeker README

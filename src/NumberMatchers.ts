@@ -104,56 +104,39 @@ export class NumberMatcher {
     return formatted_representation;
   }
 
-  protected build_hex() {
+  protected build_hex(config: Config) {
     let hex_representation =
       this.value! >= 0
         ? this.value!.toString(16)
         : (this.value! >>> 0).toString(16);
 
-    // TODO: Ability to set whether you want to show hex characters upercased
-    hex_representation = hex_representation.toUpperCase();
+    if (config.hex_showUpercased) {
+      hex_representation = hex_representation.toUpperCase();
+    }
 
-    // TODO: Ability to set whether you want to prepand zero on hex numbers
-    if (hex_representation.length < 2) {
+    if (config.hex_trimTrailingFs) {
+      while (
+        hex_representation.startsWith("F", 1) ||
+        hex_representation.startsWith("f", 1)
+      ) {
+        hex_representation = hex_representation.substring(1);
+      }
+    }
+
+    if (config.hex_prependZeroWhenPossible && hex_representation.length < 2) {
       hex_representation = "0" + hex_representation;
     }
 
-    // TODO: Ability to set whether you want to show 0x
-    hex_representation = "0x" + hex_representation;
+    if (config.hex_show0xBeforeHex) {
+      hex_representation = "0x" + hex_representation;
+    }
 
     return hex_representation;
   }
 
-  private build_hex_logic(hex_representation: string) {
-    // TODO: Ability to set how many hex numbers/chars you want to show before space
-    const split_every_n = 2;
-
-    let splitted_representation = split_into_reversed_arr(
-      hex_representation,
-      split_every_n
-    );
-
-    splitted_representation = splitted_representation.map((s) => {
-      // TODO: Ability to set whether you want to show hex characters upercased
-      s = s.toUpperCase();
-
-      // TODO: Ability to set whether you want to prepand zero on hex numbers
-      if (s.length < 2) {
-        s = "0" + s;
-      }
-
-      return s;
-    });
-
-    // TODO: Ability to set whether you want to show 0x
-    const formatted_representation =
-      piece_back_together_splitted_representation(
-        splitted_representation,
-        " 0x"
-      );
-
-    return formatted_representation;
-  }
+  // protected build_exponential() {
+  //   return this.value!.toExponential();
+  // }
 
   protected build_preview_item(name: string, value: string) {
     return `\n\n**${name}:** ${value}`;
@@ -165,7 +148,10 @@ export class NumberMatcher {
       this.build_decimal().trim()
     );
     dialog_text += this.build_binary(config);
-    dialog_text += this.build_preview_item("Hex", this.build_hex().trim());
+    dialog_text += this.build_preview_item(
+      "Hex",
+      this.build_hex(config).trim()
+    );
     return dialog_text;
   }
 }
@@ -174,7 +160,7 @@ function split_into_reversed_arr(
   value: string,
   number_of_places: number
 ): string[] {
-  let splitted_representation = [];
+  let splitted_representation: string[] = [];
   for (let i = value.length; i > 0; i -= number_of_places) {
     let start_split_index = i - number_of_places;
     if (start_split_index < 0) {
