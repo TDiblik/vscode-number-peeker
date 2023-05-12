@@ -21,6 +21,7 @@ export interface Config {
   hex_show0xBeforeHex: boolean;
 
   exponential_show: boolean;
+  exponential_numberOfFractionDigits: number;
 }
 
 export function get_config(): Config {
@@ -97,6 +98,11 @@ export function get_config(): Config {
       workspace_config,
       "number-peeker.exponential.show",
       false
+    ),
+    exponential_numberOfFractionDigits: get_positive_int(
+      workspace_config,
+      "number-peeker.exponential.numberOfFractionDigits",
+      5
     ),
   };
   return current_config;

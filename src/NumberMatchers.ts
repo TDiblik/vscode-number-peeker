@@ -134,8 +134,8 @@ export class NumberMatcher {
     return hex_representation;
   }
 
-  protected build_exponential() {
-    return this.value!.toExponential();
+  protected build_exponential(config: Config) {
+    return this.value!.toExponential(config.exponential_numberOfFractionDigits);
   }
 
   protected build_preview_item(name: string, value: string) {
@@ -162,7 +162,7 @@ export class NumberMatcher {
     if (config.exponential_show) {
       dialog_text += this.build_preview_item(
         "Exponential",
-        this.build_exponential().trim()
+        this.build_exponential(config).trim()
       );
     }
     return dialog_text;

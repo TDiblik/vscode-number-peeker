@@ -68,7 +68,7 @@
         "number-peeker.binary.splitNumbersEveryN": {
           "type": "integer",
           "default": 8,
-          "markdownDescription": "How many numbers to should be in one group, before getting splitted by space. If you don't want to split every N characters, just set this value really high, like 99999.. If you don't want to split every N characters, just set this value really high, like 99999 (and set number-peeker.binary.padding to false!)"
+          "markdownDescription": "How many numbers to should be in one group, before getting splitted by space. If you don't want to split every N characters, just set this value really high, like 99999.. If you don't want to split every N characters, just set this value really high, like 99999 (and set number-peeker.binary.padding to false!). Defaults to 5"
         },
         "number-peeker.binary.padding": {
           "type": "boolean",
@@ -104,6 +104,11 @@
           "type": "boolean",
           "default": false,
           "markdownDescription": "Show exponential representation of the number."
+        },
+        "number-peeker.exponential.numberOfFractionDigits": {
+          "type": "integer",
+          "default": 5,
+          "markdownDescription": "Number of fraction digits in inclusive range of 0-20. Defaults to 5"
         }
       }
     },
