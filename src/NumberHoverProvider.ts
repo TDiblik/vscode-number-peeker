@@ -30,6 +30,9 @@ export default class NumberHoverProvider implements vscode.HoverProvider {
 
     // Ordered by importance
     let all_matchers: NumberMatcher[] = [];
+    if (this.config.match_against_hex_numbers) {
+      all_matchers.push(this.hex_number_matcher);
+    }
     if (this.config.match_against_binary_numbers) {
       all_matchers.push(this.binary_number_matcher);
     }

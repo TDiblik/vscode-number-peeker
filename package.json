@@ -40,6 +40,11 @@
           "default": true,
           "markdownDescription": "Whether to match whenever user hovers over binary number."
         },
+        "number-peeker.match-against.hex-numbers": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to match whenever user hovers over hexadecimal number."
+        },
         "number-peeker.decimal.show": {
           "type": "boolean",
           "default": true,
