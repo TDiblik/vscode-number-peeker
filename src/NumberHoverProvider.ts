@@ -8,14 +8,16 @@ export default class NumberHoverProvider implements vscode.HoverProvider {
     this.config = get_config();
   }
 
-  public whole_number_matcher = new NumberMatcher(/(\-)?\b\d+\b/gim);
-  public binary_number_matcher = new NumberMatcher(/TODO/gim);
-
-  // Ordered by importance
-  public all_matchers: NumberMatcher[] = [
-    this.binary_number_matcher,
-    this.whole_number_matcher,
-  ];
+  // For easier development (smaller headache): https://regex101.com/
+  public whole_number_matcher = new NumberMatcher(
+    /(?<=[ ]|\[|^|\"|\'|\`)(\-)?\b(?!\_)(\d|(\_(?!\_)))+\b(?<!\_)/gim
+  );
+  public binary_number_matcher = new NumberMatcher(
+    /(\-)?\b0(b|B)(?!\_)(0|1|(\_(?!\_))){1,}\b(?<!\_)(?=\;|$|[ ]|\]|\)|\}|\"|\'|\`)/gim
+  );
+  public hex_number_matcher = new NumberMatcher(
+    /(\-)?\b0(x|X)(?!\_)([0-9]|[A-F]|(\_(?!\_))){1,}\b(?<!\_)(?=\;|$|[ ]|\]|\)|\}|\"|\'|\`)/gim
+  );
 
   provideHover(
     document: vscode.TextDocument,
@@ -26,8 +28,17 @@ export default class NumberHoverProvider implements vscode.HoverProvider {
       return;
     }
 
+    // Ordered by importance
+    let all_matchers: NumberMatcher[] = [];
+    if (this.config.match_against_binary_numbers) {
+      all_matchers.push(this.binary_number_matcher);
+    }
+    if (this.config.match_against_whole_numbers) {
+      all_matchers.push(this.whole_number_matcher);
+    }
+
     let hover_text: string | null = null;
-    for (const matcher of this.all_matchers) {
+    for (const matcher of all_matchers) {
       if (matcher.match(document, position)) {
         hover_text = matcher.build_dialog_text(this.config);
         break;
