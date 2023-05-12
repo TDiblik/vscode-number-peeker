@@ -3,6 +3,9 @@ import * as vscode from "vscode";
 export interface Config {
   enabled: boolean;
 
+  match_against_whole_numbers: boolean;
+  match_against_binary_numbers: boolean;
+
   decimal_show: boolean;
 
   binary_show: boolean;
@@ -28,6 +31,17 @@ export function get_config(): Config {
   let workspace_config = vscode.workspace.getConfiguration();
   let current_config: Config = {
     enabled: get_bool(workspace_config, "number-peeker.enabled", true),
+
+    match_against_whole_numbers: get_bool(
+      workspace_config,
+      "number-peeker.match-against.whole-numbers",
+      true
+    ),
+    match_against_binary_numbers: get_bool(
+      workspace_config,
+      "number-peeker.match-against.binary-numbers",
+      true
+    ),
 
     decimal_show: get_bool(
       workspace_config,

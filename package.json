@@ -30,6 +30,16 @@
           "default": true,
           "markdownDescription": "Whether this extension should be enabled (work). This setting is here, whenever you want to temporally disable this extension without removing it."
         },
+        "number-peeker.match-against.whole-numbers": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to match whenever user hovers over whole number."
+        },
+        "number-peeker.match-against.binary-numbers": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to match whenever user hovers over binary number."
+        },
         "number-peeker.decimal.show": {
           "type": "boolean",
           "default": true,
