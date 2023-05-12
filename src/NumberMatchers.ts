@@ -27,7 +27,6 @@ export class NumberMatcher {
     }
 
     this.value = possible_value;
-    console.log(this.value);
     return true;
   }
 
@@ -35,7 +34,7 @@ export class NumberMatcher {
     return this.value!.toString();
   }
 
-  protected build_binary() {
+  protected build_binary(config: Config) {
     const v = this.value!;
 
     if (v >= 0) {
@@ -53,39 +52,27 @@ export class NumberMatcher {
       );
     }
 
-    // TODO: Ability to set which ones to show in settings (only show i32 by default)
-    // TODO: Do the same thing for i64 and i128
-
     // MSB will always be flipped, since I'm checking for max number, no need to flip/check
     const v_i32 = v >>> 0;
-    const i8_representation =
-      v < -128
-        ? null
-        : this.build_binary_logic(v_i32.toString(2).substring(24));
-    const i16_representation =
-      v < -32768
-        ? null
-        : this.build_binary_logic(v_i32.toString(2).substring(16));
-    const i32_representation =
-      v < -2147483648 ? null : this.build_binary_logic(v_i32.toString(2));
 
+    // TODO: Do the same thing for i64 and i128
     let text = "";
-    if (i8_representation !== null) {
+    if (config.showI8WhenPossible && v >= -128) {
       text += this.build_preview_item(
         "Binary (signed 8)",
-        i8_representation.trim()
+        this.build_binary_logic(v_i32.toString(2).substring(24)).trim()
       );
     }
-    if (i16_representation !== null) {
+    if (config.showI16WhenPossible && v >= -32768) {
       text += this.build_preview_item(
         "Binary (signed 16)",
-        i16_representation.trim()
+        this.build_binary_logic(v_i32.toString(2).substring(16)).trim()
       );
     }
-    if (i32_representation !== null) {
+    if (config.showI32WhenPossible && v >= -2147483648) {
       text += this.build_preview_item(
         "Binary (signed 32)",
-        i32_representation.trim()
+        this.build_binary_logic(v_i32.toString(2)).trim()
       );
     }
 
@@ -96,7 +83,6 @@ export class NumberMatcher {
     // TODO: Ability to set how many binary numbers you want to show before space
     const split_every_n = 8;
 
-    // TODO: Currently only works for unsigned. Add signed int support.
     let splitted_representation = split_into_reversed_arr(
       binary_representation,
       split_every_n
@@ -157,12 +143,12 @@ export class NumberMatcher {
     return `\n\n**${name}:** ${value}`;
   }
 
-  public build_dialog_text() {
+  public build_dialog_text(config: Config) {
     let dialog_text = this.build_preview_item(
       "Decimal",
       this.build_decimal().trim()
     );
-    dialog_text += this.build_binary();
+    dialog_text += this.build_binary(config);
     dialog_text += this.build_preview_item("Hex", this.build_hex().trim());
     return dialog_text;
   }

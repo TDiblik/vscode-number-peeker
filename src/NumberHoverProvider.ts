@@ -25,7 +25,7 @@ export default class NumberHoverProvider implements vscode.HoverProvider {
     let hover_text = null;
     for (const matcher of this.all_matchers) {
       if (matcher.match(document, position)) {
-        hover_text = matcher.build_dialog_text();
+        hover_text = matcher.build_dialog_text(this.config);
         break;
       }
     }
