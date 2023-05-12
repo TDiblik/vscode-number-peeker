@@ -22,10 +22,30 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "Number Peeker",
+      "properties": {
+        "number-peekeer.binary.showI8WhenPossible": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to show usigned 8 bit representation wheneveer user hovers over negative number"
+        },
+        "number-peekeer.binary.showI16WhenPossible": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to show usigned 16 bit representation wheneveer user hovers over negative number"
+        },
+        "number-peekeer.binary.showI32WhenPossible": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show usigned 32 bit representation wheneveer user hovers over negative number"
+        }
+      }
+    },
     "commands": [
       {
-        "command": "vscode-number-peeker.helloWorld",
-        "title": "Hello World"
+        "command": "number-peeker.reload-config",
+        "title": "Number peeker: Reload configuration"
       }
     ]
   },

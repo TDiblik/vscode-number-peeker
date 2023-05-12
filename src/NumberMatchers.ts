@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
+import { Config, get_config } from "./Config";
 
 // Used classes to keep things separated and intialize regex only once (in the construtor).
 export class NumberMatcher {
   public readonly regex: RegExp;
   protected value: number | null = null;
 
-  // TODO: Take config as parameter
   constructor(_regex: RegExp) {
     this.regex = _regex;
   }

@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
 import { NumberMatcher } from "./NumberMatchers";
+import { Config, get_config } from "./Config";
 
 export default class NumberHoverProvider implements vscode.HoverProvider {
-  public regex_match_decimal = `TODO`;
-  public regex_match_binary = `TODO`;
-  public regex_match_hex = `TODO`;
-  public regex_match_fraction = `TODO`;
-  public regex_match_exponent = `TODO`;
+  public config: Config = get_config();
+  public reload_config() {
+    this.config = get_config();
+  }
 
   public whole_number_matcher = new NumberMatcher(/(\-)?\b\d+\b/gim);
   public binary_number_matcher = new NumberMatcher(/TODO/gim);
