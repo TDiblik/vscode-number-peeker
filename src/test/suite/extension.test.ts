@@ -1,7 +1,6 @@
 import * as assert from "assert";
 
 import NumberHoverProvider from "../../NumberHoverProvider";
-import { MockMatcher, NumberMatcher } from "../../NumberMatchers";
 
 const global_failing_cases = [
   "Infinity",
@@ -314,58 +313,4 @@ suite("Exponential number matching", () => {
       );
     });
   }
-});
-
-// Does not work
-suite("Value translations", () => {
-  /*
-  const success_cases = [
-    {
-      value: 0,
-      expected_binary_representation: "00000000",
-      expected_hex_representation: "0x00",
-    },
-    {
-      value: 1,
-      expected_binary_representation: "00000001",
-      expected_hex_representation: "0x01",
-    },
-    {
-      value: 10,
-      expected_binary_representation: "00001010",
-      expected_hex_representation: "0x0A",
-    },
-    {
-      value: 1234,
-      expected_binary_representation: "00000100 11010010",
-      expected_hex_representation: "0x04 0xD2",
-    },
-
-    {
-      value: -32769,
-      expected_binary_representation: "10000000 00000000 00000000 00000000",
-      expected_hex_representation: "0x80 0x00 0x00 0x00",
-    },
-    // {
-    //   value: -2147483648,
-    //   expected_binary_representation: "10000000 00000000 00000000 00000000",
-    //   expected_hex_representation: "0x80 0x00 0x00 0x00",
-    // },
-  ];
-
-  for (const success_case of success_cases) {
-    const number_matcher = new MockMatcher(
-      success_case.value.toString(),
-      success_case.expected_binary_representation,
-      success_case.expected_hex_representation
-    );
-    number_matcher.force_set_value(success_case.value);
-    test(`${success_case.value} should output expected representations (${success_case.value} ; ${success_case.expected_binary_representation} ; ${success_case.expected_hex_representation})`, () => {
-      assert.strictEqual(
-        number_matcher.build_dialog_text(),
-        number_matcher.build_expected_output()
-      );
-    });
-  }
-  */
 });

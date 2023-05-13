@@ -4,7 +4,7 @@ import { Config } from "./Config";
 // Used classes to keep things separated and intialize regex only once (in the construtor).
 export class NumberMatcher {
   public readonly regex: RegExp;
-  protected value: number | null = null;
+  protected value: bigint | null = null;
 
   constructor(_regex: RegExp) {
     this.regex = _regex;
@@ -26,37 +26,56 @@ export class NumberMatcher {
       matched_text.endsWith("L") ||
       matched_text.endsWith("l") ||
       matched_text.endsWith("u") ||
-      matched_text.endsWith("U") ||
-      matched_text.endsWith("u8") ||
-      matched_text.endsWith("u16") ||
-      matched_text.endsWith("u32") ||
-      matched_text.endsWith("u64") ||
-      matched_text.endsWith("u64") ||
-      matched_text.endsWith("u128") ||
-      matched_text.endsWith("usize") ||
-      matched_text.endsWith("i8") ||
-      matched_text.endsWith("i16") ||
-      matched_text.endsWith("i32") ||
-      matched_text.endsWith("i64") ||
-      matched_text.endsWith("i64") ||
-      matched_text.endsWith("i128") ||
-      matched_text.endsWith("isize")
+      matched_text.endsWith("U")
     ) {
       matched_text = matched_text.slice(0, -1);
     }
+    if (matched_text.endsWith("u8")) {
+      matched_text = matched_text.replace("u8", "");
+    }
+    if (matched_text.endsWith("u16")) {
+      matched_text = matched_text.replace("u16", "");
+    }
+    if (matched_text.endsWith("u32")) {
+      matched_text = matched_text.replace("u32", "");
+    }
+    if (matched_text.endsWith("u64")) {
+      matched_text = matched_text.replace("u64", "");
+    }
+    if (matched_text.endsWith("u128")) {
+      matched_text = matched_text.replace("u128", "");
+    }
+    if (matched_text.endsWith("usize")) {
+      matched_text = matched_text.replace("usize", "");
+    }
+    if (matched_text.endsWith("i8")) {
+      matched_text = matched_text.replace("i8", "");
+    }
+    if (matched_text.endsWith("i16")) {
+      matched_text = matched_text.replace("i16", "");
+    }
+    if (matched_text.endsWith("i32")) {
+      matched_text = matched_text.replace("i32", "");
+    }
+    if (matched_text.endsWith("i64")) {
+      matched_text = matched_text.replace("i64", "");
+    }
+    if (matched_text.endsWith("i128")) {
+      matched_text = matched_text.replace("i128", "");
+    }
+    if (matched_text.endsWith("isize")) {
+      matched_text = matched_text.replace("isize", "");
+    }
+
     if (
       matched_text.includes(".") &&
       (matched_text.endsWith("f") || matched_text.endsWith("F"))
     ) {
       matched_text = matched_text.slice(0, -1);
     }
+    matched_text = matched_text.replace(/\_/gim, "");
 
-    const possible_value = Number(matched_text);
-    if (Number.isNaN(possible_value) || !Number.isFinite(possible_value)) {
-      return false;
-    }
-
-    this.value = possible_value;
+    this.value = BigInt(matched_text);
     return true;
   }
 
@@ -77,18 +96,18 @@ export class NumberMatcher {
       );
     }
 
-    if (v > 2147483647 || v < -2147483648) {
+    if (v < -170_141_183_460_469_231_731_687_303_715_884_105_728n) {
       if (!config.binary_showWarningWhenNumberOutsideOfRange) {
         return "";
       }
       return this.build_preview_item(
         "Binary",
-        "Currentlly unable to work with >32 bit numbers."
+        "Currentlly unable to work with >128 bit signed numbers."
       );
     }
 
     // MSB will always be flipped, since I'm checking for max number, no need to flip/check
-    const v_i32 = v >>> 0;
+    const v_i32 = Number(v) >>> 0;
 
     // TODO: Do the same thing for i64 and i128
     let text = "";
@@ -108,6 +127,26 @@ export class NumberMatcher {
       text += this.build_preview_item(
         "Binary (signed 32)",
         this.build_binary_logic(v_i32.toString(2), config).trim()
+      );
+    }
+
+    const v_BigInt = BigInt(v);
+    if (config.binary_showI64WhenPossible && v >= -9_223_372_036_854_775_808n) {
+      let v_64 = BigInt.asUintN(64, v_BigInt);
+      text += this.build_preview_item(
+        "Binary (signed 64)",
+        this.build_binary_logic(v_64.toString(2), config).trim()
+      );
+    }
+
+    if (
+      config.binary_showI128WhenPossible &&
+      v >= -170_141_183_460_469_231_731_687_303_715_884_105_728n
+    ) {
+      let v_128 = BigInt.asUintN(128, v_BigInt);
+      text += this.build_preview_item(
+        "Binary (signed 128)",
+        this.build_binary_logic(v_128.toString(2), config).trim()
       );
     }
 
@@ -136,9 +175,7 @@ export class NumberMatcher {
 
   protected build_hex(config: Config) {
     let hex_representation =
-      this.value! >= 0
-        ? this.value!.toString(16)
-        : (this.value! >>> 0).toString(16);
+      this.value! >= 0 ? this.value!.toString(16) : this.value!.toString(16);
 
     if (config.hex_showUpercased) {
       hex_representation = hex_representation.toUpperCase();
@@ -165,7 +202,10 @@ export class NumberMatcher {
   }
 
   protected build_exponential(config: Config) {
-    return this.value!.toExponential(config.exponential_numberOfFractionDigits);
+    return this.value!.toLocaleString("en-US", {
+      notation: "scientific",
+      maximumFractionDigits: config.exponential_numberOfFractionDigits as any,
+    });
   }
 
   protected build_preview_item(name: string, value: string) {
@@ -180,14 +220,14 @@ export class NumberMatcher {
         this.build_decimal().trim()
       );
     }
-    if (config.binary_show) {
-      dialog_text += this.build_binary(config);
-    }
     if (config.hex_show) {
       dialog_text += this.build_preview_item(
         "Hex",
         this.build_hex(config).trim()
       );
+    }
+    if (config.binary_show) {
+      dialog_text += this.build_binary(config);
     }
     if (config.exponential_show) {
       dialog_text += this.build_preview_item(
@@ -228,33 +268,4 @@ function piece_back_together_splitted_representation(
     formatted_representation += `${prepend_to_each}${value}`;
   }
   return formatted_representation;
-}
-
-export class MockMatcher extends NumberMatcher {
-  protected readonly expected_decimal: string;
-  protected readonly expected_binary_usingned: string;
-  // protected readonly expected_binary_i8: string;
-  // protected readonly expected_binary_i16: string;
-  // protected readonly expected_binary_i32: string;
-  protected readonly expected_hex: string;
-
-  constructor(
-    _expected_decimal: string,
-    _expected_binary: string,
-    _expected_hex: string
-    // _expected_exponential_notation: string
-  ) {
-    super(/DOES_NOT_MATTER/);
-    this.expected_decimal = _expected_decimal;
-    this.expected_binary_usingned = _expected_binary;
-    this.expected_hex = _expected_hex;
-  }
-
-  public force_set_value(value: number) {
-    this.value = value;
-  }
-
-  public build_expected_output() {
-    return `**Decimal:** ${this.expected_decimal.trim()}\n**Binary:** ${this.expected_binary_usingned.trim()}**Hex:** ${this.expected_hex.trim()}\n`;
-  }
 }

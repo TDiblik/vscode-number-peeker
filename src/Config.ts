@@ -16,6 +16,8 @@ export interface Config {
   binary_showI8WhenPossible: boolean;
   binary_showI16WhenPossible: boolean;
   binary_showI32WhenPossible: boolean;
+  binary_showI64WhenPossible: boolean;
+  binary_showI128WhenPossible: boolean;
   binary_showWarningWhenNumberOutsideOfRange: boolean;
   binary_splitEveryN: number;
   binary_padding: boolean;
@@ -87,6 +89,16 @@ export function get_config(): Config {
       workspace_config,
       "number-peekeer.binary.showI32WhenPossible",
       true
+    ),
+    binary_showI64WhenPossible: get_bool(
+      workspace_config,
+      "number-peekeer.binary.showI64WhenPossible",
+      false
+    ),
+    binary_showI128WhenPossible: get_bool(
+      workspace_config,
+      "number-peekeer.binary.showI128WhenPossible",
+      false
     ),
     binary_showWarningWhenNumberOutsideOfRange: get_bool(
       workspace_config,
