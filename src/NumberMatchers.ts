@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { Config, get_config } from "./Config";
+import { Config } from "./Config";
 
 // Used classes to keep things separated and intialize regex only once (in the construtor).
 export class NumberMatcher {
@@ -21,7 +21,17 @@ export class NumberMatcher {
       return false;
     }
 
-    const possible_value = Number(document.getText(matched_value));
+    let matched_text = document.getText(matched_value).trim();
+    while (
+      matched_text.endsWith("L") ||
+      matched_text.endsWith("l") ||
+      matched_text.endsWith("u") ||
+      matched_text.endsWith("U")
+    ) {
+      matched_text = matched_text.slice(0, -1);
+    }
+
+    const possible_value = Number(matched_text);
     if (Number.isNaN(possible_value) || !Number.isFinite(possible_value)) {
       return false;
     }

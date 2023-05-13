@@ -55,6 +55,11 @@ suite("Whole number matching", () => {
     "const example_obj = {a: 1};",
     "1_2_3",
     "-1_2_3",
+    "123L",
+    "123l",
+    "123ul",
+    "123UL",
+    "123LL",
   ];
   for (const success_case of success_cases) {
     const matching_provider = new NumberHoverProvider();
@@ -88,6 +93,7 @@ suite("Decimal number matching", () => {
     "1_000.001_001",
     "123.",
     ".123",
+    "0.0f",
   ];
   for (const success_case of success_cases) {
     const matching_provider = new NumberHoverProvider();

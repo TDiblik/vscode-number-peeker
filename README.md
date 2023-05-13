@@ -24,6 +24,19 @@
 
 # Dev
 
+Setup
+
+```
+npm install -g yo generator-code
+```
+
+Debug
+
+```
+1. npm run watch
+2. Use VSCode debugger (F5)
+```
+
 Total cleanup (make sure to have VSCode closed)
 
 ```
