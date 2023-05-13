@@ -12,11 +12,14 @@ export default class NumberHoverProvider implements vscode.HoverProvider {
   public whole_number_matcher = new NumberMatcher(
     /(?<=[ ]|\[|^|\"|\'|\`)(\-)?\b(?!\_)(\d|(\_(?!\_)))+\b(?<!\_)/gim
   );
+  public decimal_number_matcher = new NumberMatcher(
+    /(?<=[ ]|\[|^|\"|\'|\`)(\-)?\b(?!\_)(\d|(\_(?!\_)))*\.(?!\_)(\d|(\_(?!\_)))*\b\.?(?<!\_)/gim
+  );
   public binary_number_matcher = new NumberMatcher(
-    /(\-)?\b0(b|B)(?!\_)(0|1|(\_(?!\_))){1,}\b(?<!\_)(?=\;|$|[ ]|\]|\)|\}|\"|\'|\`)/gim
+    /(\-)?\b0(b|B)(?!\_)(0|1|(\_(?!\_)))+\b(?<!\_)(?=\;|$|[ ]|\]|\)|\}|\"|\'|\`)/gim
   );
   public hex_number_matcher = new NumberMatcher(
-    /(\-)?\b0(x|X)(?!\_)([0-9]|[A-F]|(\_(?!\_))){1,}\b(?<!\_)(?=\;|$|[ ]|\]|\)|\}|\"|\'|\`)/gim
+    /(\-)?\b0(x|X)(?!\_)([0-9]|[A-F]|(\_(?!\_)))+\b(?<!\_)(?=\;|$|[ ]|\]|\)|\}|\"|\'|\`)/gim
   );
 
   provideHover(

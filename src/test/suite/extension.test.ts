@@ -24,6 +24,7 @@ const global_failing_cases = [
   "0x1p-2.3",
   "0xffzz",
 ];
+
 suite("Whole number matching", () => {
   const success_cases = [
     "0",
@@ -71,6 +72,39 @@ suite("Whole number matching", () => {
     test(`${failing_case} should fail to match`, () => {
       assert.strictEqual(
         matching_provider.whole_number_matcher.regex.test(failing_case),
+        false
+      );
+    });
+  }
+});
+
+suite("Decimal number matching", () => {
+  const success_cases = [
+    "0.0",
+    "123.456",
+    ".456",
+    "-123.456",
+    "-.456",
+    "1_000.001_001",
+    "123.",
+    ".123",
+  ];
+  for (const success_case of success_cases) {
+    const matching_provider = new NumberHoverProvider();
+    test(`${success_case} should pass`, () => {
+      assert.strictEqual(
+        matching_provider.decimal_number_matcher.regex.test(success_case),
+        true
+      );
+    });
+  }
+
+  const local_failing_cases = ["1__2_3", "1000.0_"];
+  for (const failing_case of global_failing_cases.concat(local_failing_cases)) {
+    const matching_provider = new NumberHoverProvider();
+    test(`${failing_case} should fail to match`, () => {
+      assert.strictEqual(
+        matching_provider.decimal_number_matcher.regex.test(failing_case),
         false
       );
     });
