@@ -1,10 +1,14 @@
 import * as vscode from "vscode";
+import bigDecimal = require("js-big-decimal");
 import { Config } from "./Config";
 
 // Used classes to keep things separated and intialize regex only once (in the construtor).
 export class NumberMatcher {
   public readonly regex: RegExp;
   protected value: bigint | null = null;
+  protected decimal_multiplier: bigint | null = null;
+  protected decimal_multiplier_len: number | null = null;
+  protected decimal_mulitplier_val: bigint | null = null;
 
   constructor(_regex: RegExp) {
     this.regex = _regex;
@@ -15,6 +19,9 @@ export class NumberMatcher {
     position: vscode.Position
   ): boolean {
     this.value = null;
+    this.decimal_multiplier = null;
+    this.decimal_multiplier_len = null;
+    this.decimal_mulitplier_val = null;
 
     const matched_value = document.getWordRangeAtPosition(position, this.regex);
     if (matched_value === undefined) {
@@ -26,7 +33,8 @@ export class NumberMatcher {
       matched_text.endsWith("L") ||
       matched_text.endsWith("l") ||
       matched_text.endsWith("u") ||
-      matched_text.endsWith("U")
+      matched_text.endsWith("U") ||
+      matched_text.endsWith("n")
     ) {
       matched_text = matched_text.slice(0, -1);
     }
@@ -75,16 +83,98 @@ export class NumberMatcher {
     }
     matched_text = matched_text.replace(/\_/gim, "");
 
+    if (matched_text.includes("e") || matched_text.includes("E")) {
+      this.value = BigInt(
+        parseFloat(matched_text)
+          .toString()
+          .replace(".", "")
+          .replace("e+", "0".repeat(10))
+      );
+      return true;
+    }
+    if (matched_text.includes(".")) {
+      const splitted = matched_text.split(".");
+      const l_part = !matched_text.startsWith("-")
+        ? BigInt(splitted[0])
+        : BigInt(splitted[0].substring(1)) * -1n;
+      const r_part = !matched_text.startsWith("-")
+        ? BigInt(splitted[1])
+        : BigInt(splitted[1]) * -1n;
+      const multiplier_len = splitted[1].length;
+      const multiplier = BigInt(Math.pow(10, multiplier_len));
+
+      this.value = l_part * multiplier;
+      this.decimal_multiplier = multiplier;
+      this.decimal_multiplier_len = multiplier_len;
+      this.decimal_mulitplier_val = r_part;
+      return true;
+    }
+    if (matched_text.startsWith("-")) {
+      this.value = BigInt(matched_text.substring(1)) * -1n;
+      return true;
+    }
+
     this.value = BigInt(matched_text);
     return true;
   }
 
   protected build_decimal() {
-    return this.value!.toString();
+    if (this.decimal_multiplier === null) {
+      return this.value!.toString();
+    }
+    const divider = new bigDecimal(this.decimal_multiplier!);
+    const val = new bigDecimal(this.value!)
+      .divide(divider, this.decimal_multiplier_len!)
+      .add(
+        new bigDecimal(this.decimal_mulitplier_val!).divide(
+          divider,
+          this.decimal_multiplier_len!
+        )
+      );
+    return val.getValue();
   }
 
-  protected build_binary(config: Config) {
-    const v = this.value!;
+  protected build_binary(
+    config: Config,
+    force_v: bigint | null = null,
+    ignore_decimal: boolean = false
+  ) {
+    const v = force_v ?? this.value!;
+
+    if (this.decimal_multiplier !== null && !ignore_decimal) {
+      try {
+        let text = this.build_binary(
+          config,
+          v / this.decimal_multiplier!,
+          true
+        );
+
+        let r_part = new bigDecimal(this.decimal_mulitplier_val!)
+          .divide(
+            new bigDecimal(this.decimal_multiplier!),
+            this.decimal_multiplier_len
+          )
+          .getValue();
+        if (r_part.startsWith("-")) {
+          r_part = r_part.substring(1);
+        }
+        text +=
+          " . " +
+          this.build_binary_logic(
+            parseFloat(r_part).toString(2).replace(".", "").trim(),
+            config
+          );
+        return text;
+      } catch {
+        if (!config.binary_showUnsignedWhenPossible) {
+          return "";
+        }
+        return this.build_preview_item(
+          "Binary",
+          "Error while parsing floating."
+        );
+      }
+    }
 
     if (v >= 0) {
       if (!config.binary_showUnsignedWhenPossible) {
@@ -109,7 +199,6 @@ export class NumberMatcher {
     // MSB will always be flipped, since I'm checking for max number, no need to flip/check
     const v_i32 = Number(v) >>> 0;
 
-    // TODO: Do the same thing for i64 and i128
     let text = "";
     let already_shown_smallest = false;
     if (
@@ -201,8 +290,45 @@ export class NumberMatcher {
     return formatted_representation;
   }
 
-  protected build_hex(config: Config) {
-    const v = this.value!;
+  protected build_hex(
+    config: Config,
+    force_v: bigint | null = null,
+    ignore_decimal: boolean = false
+  ) {
+    const v = force_v ?? this.value!;
+
+    if (this.decimal_multiplier !== null && !ignore_decimal) {
+      try {
+        let text = this.build_hex(config, v / this.decimal_multiplier!, true);
+
+        let r_part = new bigDecimal(this.decimal_mulitplier_val!)
+          .divide(
+            new bigDecimal(this.decimal_multiplier!),
+            this.decimal_multiplier_len
+          )
+          .getValue();
+        if (r_part.startsWith("-")) {
+          r_part = r_part.substring(1);
+        }
+        console.log(parseFloat(r_part).toString(16).trim());
+        text +=
+          "." +
+          this.build_hex_logic(
+            parseFloat(r_part).toString(16).replace("0.", "").trim(),
+            config
+          )
+            .replace("0x0", "")
+            .replace("0X0", "")
+            .replace("0x", "")
+            .replace("0X", "");
+        return text;
+      } catch {
+        if (!config.hex_showUnsignedWhenPossible) {
+          return "";
+        }
+        return this.build_preview_item("Hex", "Error while parsing floating.");
+      }
+    }
 
     if (v >= 0) {
       if (!config.hex_showUnsignedWhenPossible) {
@@ -316,7 +442,24 @@ export class NumberMatcher {
   }
 
   protected build_exponential(config: Config) {
-    let value = this.value!.toLocaleString("en-US", {
+    let v: bigint | number = this.value!;
+
+    if (this.decimal_multiplier !== null) {
+      const divider = new bigDecimal(this.decimal_multiplier!);
+      const val = new bigDecimal(this.value!)
+        .divide(divider, this.decimal_multiplier_len!)
+        .add(
+          new bigDecimal(this.decimal_mulitplier_val!).divide(
+            divider,
+            this.decimal_multiplier_len!
+          )
+        );
+      try {
+        v = parseFloat(val.getValue());
+      } catch {}
+    }
+
+    let value = v.toLocaleString("en-US", {
       notation: "scientific",
       maximumFractionDigits:
         config.exponential_maximumNumberOfFractionDigits as any,
