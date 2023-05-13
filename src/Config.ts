@@ -18,6 +18,7 @@ export interface Config {
   binary_showI32WhenPossible: boolean;
   binary_showI64WhenPossible: boolean;
   binary_showI128WhenPossible: boolean;
+  binary_showSmallestPossibleRepresentation: boolean;
   binary_showWarningWhenNumberOutsideOfRange: boolean;
   binary_splitEveryN: number;
   binary_padding: boolean;
@@ -29,7 +30,8 @@ export interface Config {
   hex_show0xBeforeHex: boolean;
 
   exponential_show: boolean;
-  exponential_numberOfFractionDigits: number;
+  exponential_maximumNumberOfFractionDigits: number;
+  exponential_showNotationLowercased: boolean;
 }
 
 export function get_config(): Config {
@@ -88,7 +90,7 @@ export function get_config(): Config {
     binary_showI32WhenPossible: get_bool(
       workspace_config,
       "number-peekeer.binary.showI32WhenPossible",
-      true
+      false
     ),
     binary_showI64WhenPossible: get_bool(
       workspace_config,
@@ -99,6 +101,11 @@ export function get_config(): Config {
       workspace_config,
       "number-peekeer.binary.showI128WhenPossible",
       false
+    ),
+    binary_showSmallestPossibleRepresentation: get_bool(
+      workspace_config,
+      "number-peekeer.binary.showSmallestPossibleRepresentation",
+      true
     ),
     binary_showWarningWhenNumberOutsideOfRange: get_bool(
       workspace_config,
@@ -143,10 +150,15 @@ export function get_config(): Config {
       "number-peeker.exponential.show",
       false
     ),
-    exponential_numberOfFractionDigits: get_positive_int(
+    exponential_maximumNumberOfFractionDigits: get_positive_int(
       workspace_config,
-      "number-peeker.exponential.numberOfFractionDigits",
-      5
+      "number-peeker.exponential.maximumNumberOfFractionDigits",
+      10
+    ),
+    exponential_showNotationLowercased: get_bool(
+      workspace_config,
+      "number-peeker.exponential.showNotationLowercased",
+      false
     ),
   };
   return current_config;

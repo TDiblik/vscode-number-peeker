@@ -111,36 +111,63 @@ export class NumberMatcher {
 
     // TODO: Do the same thing for i64 and i128
     let text = "";
-    if (config.binary_showI8WhenPossible && v >= -128) {
+    let already_shown_smallest = false;
+    if (
+      (config.binary_showI8WhenPossible ||
+        (config.binary_showSmallestPossibleRepresentation &&
+          !already_shown_smallest)) &&
+      v >= -128
+    ) {
       text += this.build_preview_item(
         "Binary (signed 8)",
         this.build_binary_logic(v_i32.toString(2).substring(24), config).trim()
       );
+      already_shown_smallest = true;
     }
-    if (config.binary_showI16WhenPossible && v >= -32768) {
+    if (
+      (config.binary_showI16WhenPossible ||
+        (config.binary_showSmallestPossibleRepresentation &&
+          !already_shown_smallest)) &&
+      v >= -32_768
+    ) {
       text += this.build_preview_item(
         "Binary (signed 16)",
         this.build_binary_logic(v_i32.toString(2).substring(16), config).trim()
       );
+      already_shown_smallest = true;
     }
-    if (config.binary_showI32WhenPossible && v >= -2147483648) {
+    if (
+      (config.binary_showI32WhenPossible ||
+        (config.binary_showSmallestPossibleRepresentation &&
+          !already_shown_smallest)) &&
+      v >= -2_147_483_648
+    ) {
       text += this.build_preview_item(
         "Binary (signed 32)",
         this.build_binary_logic(v_i32.toString(2), config).trim()
       );
+      already_shown_smallest = true;
     }
 
     const v_BigInt = BigInt(v);
-    if (config.binary_showI64WhenPossible && v >= -9_223_372_036_854_775_808n) {
+    if (
+      (config.binary_showI64WhenPossible ||
+        (config.binary_showSmallestPossibleRepresentation &&
+          !already_shown_smallest)) &&
+      v >= -9_223_372_036_854_775_808n
+    ) {
       let v_64 = BigInt.asUintN(64, v_BigInt);
       text += this.build_preview_item(
         "Binary (signed 64)",
         this.build_binary_logic(v_64.toString(2), config).trim()
       );
+      already_shown_smallest = true;
     }
 
     if (
-      config.binary_showI128WhenPossible &&
+      (config.binary_showI128WhenPossible ||
+        (config.binary_showSmallestPossibleRepresentation &&
+          !already_shown_smallest)) &&
       v >= -170_141_183_460_469_231_731_687_303_715_884_105_728n
     ) {
       let v_128 = BigInt.asUintN(128, v_BigInt);
@@ -148,6 +175,7 @@ export class NumberMatcher {
         "Binary (signed 128)",
         this.build_binary_logic(v_128.toString(2), config).trim()
       );
+      already_shown_smallest = true;
     }
 
     return text;
@@ -174,8 +202,33 @@ export class NumberMatcher {
   }
 
   protected build_hex(config: Config) {
-    let hex_representation =
-      this.value! >= 0 ? this.value!.toString(16) : this.value!.toString(16);
+    const v = this.value!;
+
+    if (v < -170_141_183_460_469_231_731_687_303_715_884_105_728n) {
+      if (!config.binary_showWarningWhenNumberOutsideOfRange) {
+        return "";
+      }
+      return this.build_preview_item(
+        "Hex",
+        "Currentlly unable to work with >128 bit signed numbers."
+      );
+    }
+
+    let hex_representation = (
+      v >= 0
+        ? v
+        : v >= -128
+        ? BigInt.asUintN(8, v)
+        : v >= -32_768
+        ? BigInt.asUintN(16, v)
+        : v >= -2_147_483_648
+        ? BigInt.asUintN(32, v)
+        : v >= -9_223_372_036_854_775_808n
+        ? BigInt.asUintN(64, v)
+        : v >= -170_141_183_460_469_231_731_687_303_715_884_105_728n
+        ? BigInt.asUintN(128, v)
+        : 0
+    ).toString(16);
 
     if (config.hex_showUpercased) {
       hex_representation = hex_representation.toUpperCase();
@@ -202,10 +255,16 @@ export class NumberMatcher {
   }
 
   protected build_exponential(config: Config) {
-    return this.value!.toLocaleString("en-US", {
+    let value = this.value!.toLocaleString("en-US", {
       notation: "scientific",
-      maximumFractionDigits: config.exponential_numberOfFractionDigits as any,
+      maximumFractionDigits:
+        config.exponential_maximumNumberOfFractionDigits as any,
     });
+    if (config.exponential_showNotationLowercased) {
+      value = value.toLowerCase();
+    }
+
+    return value;
   }
 
   protected build_preview_item(name: string, value: string) {
@@ -215,16 +274,14 @@ export class NumberMatcher {
   public build_dialog_text(config: Config) {
     let dialog_text = "";
     if (config.decimal_show) {
-      dialog_text += this.build_preview_item(
-        "Decimal",
-        this.build_decimal().trim()
-      );
+      let decimal_value = this.build_decimal().trim();
+      if (config.exponential_showNotationLowercased) {
+        decimal_value = decimal_value.toLowerCase();
+      }
+      dialog_text += this.build_preview_item("Decimal", decimal_value);
     }
     if (config.hex_show) {
-      dialog_text += this.build_preview_item(
-        "Hex",
-        this.build_hex(config).trim()
-      );
+      dialog_text += this.build_hex(config);
     }
     if (config.binary_show) {
       dialog_text += this.build_binary(config);

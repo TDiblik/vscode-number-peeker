@@ -73,27 +73,32 @@
         "number-peeker.binary.showI8WhenPossible": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Whether to show usigned 8 bit representation whenever user hovers over negative number"
+          "markdownDescription": "Whether to show signed 8 bit representation whenever user hovers over negative number"
         },
         "number-peeker.binary.showI16WhenPossible": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Whether to show usigned 16 bit representation whenever user hovers over negative number"
+          "markdownDescription": "Whether to show signed 16 bit representation whenever user hovers over negative number"
         },
         "number-peeker.binary.showI32WhenPossible": {
           "type": "boolean",
-          "default": true,
-          "markdownDescription": "Whether to show usigned 32 bit representation whenever user hovers over negative number"
+          "default": false,
+          "markdownDescription": "Whether to show signed 32 bit representation whenever user hovers over negative number"
         },
         "number-peeker.binary.showI64WhenPossible": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Whether to show usigned 64 bit representation whenever user hovers over negative number"
+          "markdownDescription": "Whether to show signed 64 bit representation whenever user hovers over negative number"
         },
         "number-peeker.binary.showI128WhenPossible": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Whether to show usigned 128 bit representation whenever user hovers over negative number"
+          "markdownDescription": "Whether to show signed 128 bit representation whenever user hovers over negative number"
+        },
+        "number-peeker.binary.showSmallestPossibleRepresentation": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show signed smallest possible representation whenever user hovers over negative number"
         },
         "number-peeker.binary.showWarningWhenNumberOutsideOfRange": {
           "type": "boolean",
@@ -135,15 +140,25 @@
           "default": true,
           "markdownDescription": "Show '0x' before hex numbers, just to make it pretier :D"
         },
+        "number-peeker.hex.showWarningWhenNumberOutsideOfRange": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show warning that number is outside of the supported range of numbers (currentlly signed 128 bit int / i128)"
+        },
         "number-peeker.exponential.show": {
           "type": "boolean",
           "default": false,
           "markdownDescription": "Show exponential representation of the number."
         },
-        "number-peeker.exponential.numberOfFractionDigits": {
+        "number-peeker.exponential.maximumNumberOfFractionDigits": {
           "type": "integer",
-          "default": 5,
+          "default": 10,
           "markdownDescription": "Number of fraction digits in inclusive range of 0-20. Defaults to 5"
+        },
+        "number-peeker.exponential.showNotationLowercased": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show scientific notetion lowercased"
         }
       }
     },
