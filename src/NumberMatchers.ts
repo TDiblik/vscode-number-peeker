@@ -204,8 +204,18 @@ export class NumberMatcher {
   protected build_hex(config: Config) {
     const v = this.value!;
 
+    if (v >= 0) {
+      if (!config.hex_showUnsignedWhenPossible) {
+        return "";
+      }
+      return this.build_preview_item(
+        "Hex (unsigned)",
+        this.build_hex_logic(v.toString(16), config).trim()
+      );
+    }
+
     if (v < -170_141_183_460_469_231_731_687_303_715_884_105_728n) {
-      if (!config.binary_showWarningWhenNumberOutsideOfRange) {
+      if (!config.hex_showWarningWhenNumberOutsideOfRange) {
         return "";
       }
       return this.build_preview_item(
@@ -214,22 +224,73 @@ export class NumberMatcher {
       );
     }
 
-    let hex_representation = (
-      v >= 0
-        ? v
-        : v >= -128
-        ? BigInt.asUintN(8, v)
-        : v >= -32_768
-        ? BigInt.asUintN(16, v)
-        : v >= -2_147_483_648
-        ? BigInt.asUintN(32, v)
-        : v >= -9_223_372_036_854_775_808n
-        ? BigInt.asUintN(64, v)
-        : v >= -170_141_183_460_469_231_731_687_303_715_884_105_728n
-        ? BigInt.asUintN(128, v)
-        : 0
-    ).toString(16);
+    let text = "";
+    let already_shown_smallest = false;
+    if (
+      (config.hex_showI8WhenPossible ||
+        (config.hex_showSmallestPossibleRepresentation &&
+          !already_shown_smallest)) &&
+      v >= -128
+    ) {
+      text += this.build_preview_item(
+        "Hex (signed 8)",
+        this.build_hex_logic(BigInt.asUintN(8, v).toString(16), config).trim()
+      );
+      already_shown_smallest = true;
+    }
+    if (
+      (config.hex_showI16WhenPossible ||
+        (config.hex_showSmallestPossibleRepresentation &&
+          !already_shown_smallest)) &&
+      v >= -32_768
+    ) {
+      text += this.build_preview_item(
+        "Hex (signed 16)",
+        this.build_hex_logic(BigInt.asUintN(16, v).toString(16), config).trim()
+      );
+      already_shown_smallest = true;
+    }
+    if (
+      (config.hex_showI32WhenPossible ||
+        (config.hex_showSmallestPossibleRepresentation &&
+          !already_shown_smallest)) &&
+      v >= -2_147_483_648
+    ) {
+      text += this.build_preview_item(
+        "Hex (signed 32)",
+        this.build_hex_logic(BigInt.asUintN(32, v).toString(16), config).trim()
+      );
+      already_shown_smallest = true;
+    }
+    if (
+      (config.hex_showI64WhenPossible ||
+        (config.hex_showSmallestPossibleRepresentation &&
+          !already_shown_smallest)) &&
+      v >= -9_223_372_036_854_775_808n
+    ) {
+      text += this.build_preview_item(
+        "Hex (signed 64)",
+        this.build_hex_logic(BigInt.asUintN(64, v).toString(16), config).trim()
+      );
+      already_shown_smallest = true;
+    }
+    if (
+      (config.hex_showI128WhenPossible ||
+        (config.hex_showSmallestPossibleRepresentation &&
+          !already_shown_smallest)) &&
+      v >= -170_141_183_460_469_231_731_687_303_715_884_105_728n
+    ) {
+      text += this.build_preview_item(
+        "Hex (signed 128)",
+        this.build_hex_logic(BigInt.asUintN(128, v).toString(16), config).trim()
+      );
+      already_shown_smallest = true;
+    }
 
+    return text;
+  }
+
+  private build_hex_logic(hex_representation: string, config: Config) {
     if (config.hex_showUpercased) {
       hex_representation = hex_representation.toUpperCase();
     }

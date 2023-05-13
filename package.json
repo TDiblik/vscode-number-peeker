@@ -120,6 +120,46 @@
           "default": true,
           "markdownDescription": "Whether to show hexadecimal representation on hover"
         },
+        "number-peeker.hex.showUnsignedWhenPossible": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show usigned representation whenever user hovers over positive number"
+        },
+        "number-peeker.hex.showI8WhenPossible": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to show signed 8 bit representation whenever user hovers over negative number"
+        },
+        "number-peeker.hex.showI16WhenPossible": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to show signed 16 bit representation whenever user hovers over negative number"
+        },
+        "number-peeker.hex.showI32WhenPossible": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to show signed 32 bit representation whenever user hovers over negative number"
+        },
+        "number-peeker.hex.showI64WhenPossible": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to show signed 64 bit representation whenever user hovers over negative number"
+        },
+        "number-peeker.hex.showI128WhenPossible": {
+          "type": "boolean",
+          "default": false,
+          "markdownDescription": "Whether to show signed 128 bit representation whenever user hovers over negative number"
+        },
+        "number-peeker.hex.showSmallestPossibleRepresentation": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show signed smallest possible representation whenever user hovers over negative number"
+        },
+        "number-peeker.hex.showWarningWhenNumberOutsideOfRange": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to show warning that number is outside of the supported range of numbers (currentlly signed 128 bit int / i128)"
+        },
         "number-peeker.hex.showUpercased": {
           "type": "boolean",
           "default": false,
@@ -127,7 +167,7 @@
         },
         "number-peeker.hex.trimTrailingFs": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "markdownDescription": "Whether to trim trailing Fs from hex numbers"
         },
         "number-peeker.hex.prependZeroWhenPossible": {
@@ -139,11 +179,6 @@
           "type": "boolean",
           "default": true,
           "markdownDescription": "Show '0x' before hex numbers, just to make it pretier :D"
-        },
-        "number-peeker.hex.showWarningWhenNumberOutsideOfRange": {
-          "type": "boolean",
-          "default": true,
-          "markdownDescription": "Whether to show warning that number is outside of the supported range of numbers (currentlly signed 128 bit int / i128)"
         },
         "number-peeker.exponential.show": {
           "type": "boolean",

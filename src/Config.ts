@@ -24,6 +24,14 @@ export interface Config {
   binary_padding: boolean;
 
   hex_show: boolean;
+  hex_showUnsignedWhenPossible: boolean;
+  hex_showI8WhenPossible: boolean;
+  hex_showI16WhenPossible: boolean;
+  hex_showI32WhenPossible: boolean;
+  hex_showI64WhenPossible: boolean;
+  hex_showI128WhenPossible: boolean;
+  hex_showSmallestPossibleRepresentation: boolean;
+  hex_showWarningWhenNumberOutsideOfRange: boolean;
   hex_showUpercased: boolean;
   hex_trimTrailingFs: boolean;
   hex_prependZeroWhenPossible: boolean;
@@ -79,32 +87,32 @@ export function get_config(): Config {
     ),
     binary_showI8WhenPossible: get_bool(
       workspace_config,
-      "number-peekeer.binary.showI8WhenPossible",
+      "number-peeker.binary.showI8WhenPossible",
       false
     ),
     binary_showI16WhenPossible: get_bool(
       workspace_config,
-      "number-peekeer.binary.showI16WhenPossible",
+      "number-peeker.binary.showI16WhenPossible",
       false
     ),
     binary_showI32WhenPossible: get_bool(
       workspace_config,
-      "number-peekeer.binary.showI32WhenPossible",
+      "number-peeker.binary.showI32WhenPossible",
       false
     ),
     binary_showI64WhenPossible: get_bool(
       workspace_config,
-      "number-peekeer.binary.showI64WhenPossible",
+      "number-peeker.binary.showI64WhenPossible",
       false
     ),
     binary_showI128WhenPossible: get_bool(
       workspace_config,
-      "number-peekeer.binary.showI128WhenPossible",
+      "number-peeker.binary.showI128WhenPossible",
       false
     ),
     binary_showSmallestPossibleRepresentation: get_bool(
       workspace_config,
-      "number-peekeer.binary.showSmallestPossibleRepresentation",
+      "number-peeker.binary.showSmallestPossibleRepresentation",
       true
     ),
     binary_showWarningWhenNumberOutsideOfRange: get_bool(
@@ -119,11 +127,51 @@ export function get_config(): Config {
     ),
     binary_padding: get_bool(
       workspace_config,
-      "number-peekeer.binary.padding",
+      "number-peeker.binary.padding",
       true
     ),
 
     hex_show: get_bool(workspace_config, "number-peeker.hex.show", true),
+    hex_showUnsignedWhenPossible: get_bool(
+      workspace_config,
+      "number-peeker.hex.showUnsignedWhenPossible",
+      true
+    ),
+    hex_showI8WhenPossible: get_bool(
+      workspace_config,
+      "number-peeker.hex.showI8WhenPossible",
+      false
+    ),
+    hex_showI16WhenPossible: get_bool(
+      workspace_config,
+      "number-peeker.hex.showI16WhenPossible",
+      false
+    ),
+    hex_showI32WhenPossible: get_bool(
+      workspace_config,
+      "number-peeker.hex.showI32WhenPossible",
+      false
+    ),
+    hex_showI64WhenPossible: get_bool(
+      workspace_config,
+      "number-peeker.hex.showI64WhenPossible",
+      false
+    ),
+    hex_showI128WhenPossible: get_bool(
+      workspace_config,
+      "number-peeker.hex.showI128WhenPossible",
+      false
+    ),
+    hex_showSmallestPossibleRepresentation: get_bool(
+      workspace_config,
+      "number-peeker.hex.showSmallestPossibleRepresentation",
+      true
+    ),
+    hex_showWarningWhenNumberOutsideOfRange: get_bool(
+      workspace_config,
+      "number-peeker.hex.showWarningWhenNumberOutsideOfRange",
+      true
+    ),
     hex_showUpercased: get_bool(
       workspace_config,
       "number-peeker.hex.showUpercased",
@@ -132,7 +180,7 @@ export function get_config(): Config {
     hex_trimTrailingFs: get_bool(
       workspace_config,
       "number-peeker.hex.trimTrailingFs",
-      true
+      false
     ),
     hex_prependZeroWhenPossible: get_bool(
       workspace_config,
