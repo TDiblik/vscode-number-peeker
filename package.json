@@ -45,6 +45,16 @@
           "default": true,
           "markdownDescription": "Whether to match whenever user hovers over hexadecimal number."
         },
+        "number-peeker.match-against.decimal-numbers": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to match whenever user hovers over decimal number."
+        },
+        "number-peeker.match-against.exponential-numbers": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Whether to match whenever user hovers over exponential number (scientific notation)."
+        },
         "number-peeker.decimal.show": {
           "type": "boolean",
           "default": true,

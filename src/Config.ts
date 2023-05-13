@@ -6,6 +6,8 @@ export interface Config {
   match_against_whole_numbers: boolean;
   match_against_binary_numbers: boolean;
   match_against_hex_numbers: boolean;
+  match_against_decimal_numbers: boolean;
+  match_against_exponential_numbers: boolean;
 
   decimal_show: boolean;
 
@@ -46,6 +48,16 @@ export function get_config(): Config {
     match_against_hex_numbers: get_bool(
       workspace_config,
       "number-peeker.match-against.hex-numbers",
+      true
+    ),
+    match_against_decimal_numbers: get_bool(
+      workspace_config,
+      "number-peeker.match-against.decimal-numbers",
+      true
+    ),
+    match_against_exponential_numbers: get_bool(
+      workspace_config,
+      "number-peeker.match-against.exponential-numbers",
       true
     ),
 

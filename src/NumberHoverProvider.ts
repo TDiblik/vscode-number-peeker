@@ -9,17 +9,21 @@ export default class NumberHoverProvider implements vscode.HoverProvider {
   }
 
   // For easier development (smaller headache): https://regex101.com/
+  // I DARE ANYBODY TO OPEN ISSUE ABOUT MATCHING xd
   public whole_number_matcher = new NumberMatcher(
-    /(?<=[ ]|\[|^|\"|\'|\`)(\-)?\b(?!\_)(\d|(\_(?!\_)))+(\l|\L|\u|\U)*?\b(?<!\_)/gim
+    /(?<=[ ]|\[|^|\"|\'|\`)(\-)?\b(?!\_)(\d|(\_(?!\_)))+(l|L|u|U|u8|u16|u32|u64|u128|usize|i8|i16|i32|i64|i128|isize)*?\b(?<!\_)/gim
   );
   public decimal_number_matcher = new NumberMatcher(
-    /(?<=[ ]|\[|^|\"|\'|\`)(\-)?(\b(?!\_)(\d|(\_(?!\_)))*\.(?!\_)(\d|(\_(?!\_)))*\b|\.\d+(?!\.)(?!\_)|\d+\.(?!\.)(?!\_))(?<!\_)/gim
+    /(?<=[ ]|\[|^|\"|\'|\`)(\-)?(\b(?!\_)(\d|(\_(?!\_)))*\.(?!\_)(\d|(\_(?!\_)))*(f|F)?\b|\.\d+(?!\.)(?!\_)|\d+\.(?!\.)(?!\_))(?<!\_)/gim
   );
   public binary_number_matcher = new NumberMatcher(
-    /(\-)?\b0(b|B)(?!\_)(0|1|(\_(?!\_)))+(?<!\_)(\l|\L|\u|\U)*?\b(?<!\_)(?=\;|$|[ ]|\]|\)|\}|\"|\'|\`)/gim
+    /(\-)?\b0(b|B)(?!\_)(0|1|(\_(?!\_)))+(?<!\_)(l|L|u|U|u8|u16|u32|u64|u128|usize|i8|i16|i32|i64|i128|isize)*?\b(?<!\_)(?=\;|$|[ ]|\]|\)|\}|\"|\'|\`)/gim
   );
   public hex_number_matcher = new NumberMatcher(
-    /(\-)?\b0(x|X)(?!\_)([0-9]|[A-F]|(\_(?!\_)))+(?<!\_)(\l|\L|\u|\U)*?\b(?<!\_)(?=\;|$|[ ]|\]|\)|\}|\"|\'|\`)/gim
+    /(\-)?\b0(x|X)(?!\_)([0-9]|[A-F]|(\_(?!\_)))+(?<!\_)(l|L|u|U|u8|u16|u32|u64|u128|usize|i8|i16|i32|i64|i128|isize)*?\b(?<!\_)(?=\;|$|[ ]|\]|\)|\}|\"|\'|\`)/gim
+  );
+  public exponentional_number_matcher = new NumberMatcher(
+    /(?<=[ ]|\[|^|\"|\'|\`)(\-)?\b(?!\_)(\d|(\_(?!\_)))+\.?(?!\_)(\d|(\_(?!\_)))*(e(\-|\+)?[0-9]{1,2}|e[0-9]{1,2})\b(?<!\_)/gim
   );
 
   provideHover(
@@ -33,7 +37,12 @@ export default class NumberHoverProvider implements vscode.HoverProvider {
 
     // Ordered by importance
     let all_matchers: NumberMatcher[] = [];
-    all_matchers.push(this.decimal_number_matcher);
+    if (this.config.match_against_exponential_numbers) {
+      all_matchers.push(this.exponentional_number_matcher);
+    }
+    if (this.config.match_against_decimal_numbers) {
+      all_matchers.push(this.decimal_number_matcher);
+    }
     if (this.config.match_against_hex_numbers) {
       all_matchers.push(this.hex_number_matcher);
     }

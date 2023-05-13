@@ -60,6 +60,8 @@ suite("Whole number matching", () => {
     "123ul",
     "123UL",
     "123LL",
+    "123u8",
+    "123usize",
   ];
   for (const success_case of success_cases) {
     const matching_provider = new NumberHoverProvider();
@@ -71,7 +73,7 @@ suite("Whole number matching", () => {
     });
   }
 
-  const local_failing_cases = ["_1234_", "1234_", "_1234"];
+  const local_failing_cases = ["_1234_", "1234_", "_1234", "ABCusize"];
   for (const failing_case of global_failing_cases.concat(local_failing_cases)) {
     const matching_provider = new NumberHoverProvider();
     test(`${failing_case} should fail to match`, () => {
@@ -94,6 +96,8 @@ suite("Decimal number matching", () => {
     "123.",
     ".123",
     "0.0f",
+    "1000.09f",
+    "1000.09",
   ];
   for (const success_case of success_cases) {
     const matching_provider = new NumberHoverProvider();
@@ -105,7 +109,7 @@ suite("Decimal number matching", () => {
     });
   }
 
-  const local_failing_cases = ["1__2_3", "1000.0_"];
+  const local_failing_cases = ["1__2_3"];
   for (const failing_case of global_failing_cases.concat(local_failing_cases)) {
     const matching_provider = new NumberHoverProvider();
     test(`${failing_case} should fail to match`, () => {
@@ -263,6 +267,49 @@ suite("Hexadecimal number matching", () => {
     test(`${failing_case} should fail to match`, () => {
       assert.strictEqual(
         matching_provider.hex_number_matcher.regex.test(failing_case),
+        false
+      );
+    });
+  }
+});
+
+suite("Exponential number matching", () => {
+  const success_cases = [
+    "1e3",
+    "-1.23e-4",
+    "4.56E7",
+    " 8.9e+10 ",
+    "[1e-2]",
+    '"2e6"',
+    "'3E-8'",
+    "`1.234e+5`",
+  ];
+  for (const success_case of success_cases) {
+    const matching_provider = new NumberHoverProvider();
+    test(`${success_case} should pass`, () => {
+      assert.strictEqual(
+        matching_provider.exponentional_number_matcher.regex.test(success_case),
+        true
+      );
+    });
+  }
+
+  const local_failing_cases = [
+    "e5",
+    "1.23e",
+    "1.23e+",
+    "1.23e-",
+    "-1.23e-456",
+    "1.23e456",
+    "1.23e+456",
+    "1_2_3e4_5",
+    "1.2_3e4_5",
+  ];
+  for (const failing_case of global_failing_cases.concat(local_failing_cases)) {
+    const matching_provider = new NumberHoverProvider();
+    test(`${failing_case} should fail to match`, () => {
+      assert.strictEqual(
+        matching_provider.exponentional_number_matcher.regex.test(failing_case),
         false
       );
     });

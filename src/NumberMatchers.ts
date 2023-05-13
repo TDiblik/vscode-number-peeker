@@ -26,7 +26,27 @@ export class NumberMatcher {
       matched_text.endsWith("L") ||
       matched_text.endsWith("l") ||
       matched_text.endsWith("u") ||
-      matched_text.endsWith("U")
+      matched_text.endsWith("U") ||
+      matched_text.endsWith("u8") ||
+      matched_text.endsWith("u16") ||
+      matched_text.endsWith("u32") ||
+      matched_text.endsWith("u64") ||
+      matched_text.endsWith("u64") ||
+      matched_text.endsWith("u128") ||
+      matched_text.endsWith("usize") ||
+      matched_text.endsWith("i8") ||
+      matched_text.endsWith("i16") ||
+      matched_text.endsWith("i32") ||
+      matched_text.endsWith("i64") ||
+      matched_text.endsWith("i64") ||
+      matched_text.endsWith("i128") ||
+      matched_text.endsWith("isize")
+    ) {
+      matched_text = matched_text.slice(0, -1);
+    }
+    if (
+      matched_text.includes(".") &&
+      (matched_text.endsWith("f") || matched_text.endsWith("F"))
     ) {
       matched_text = matched_text.slice(0, -1);
     }
