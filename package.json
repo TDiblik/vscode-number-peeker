@@ -1,10 +1,11 @@
 {
   "name": "vscode-number-peeker",
-  "displayName": "Number peeker",
+  "displayName": "Number Peeker",
   "description": "Hover over number in VSCode and quickly see alternative representations",
   "version": "0.0.1",
   "license": "./LICENSE",
   "publisher": "TDiblik",
+  "icon": "./icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/TDiblik/vscode-number-peeker.git"
@@ -107,12 +108,12 @@
         "number-peeker.binary.showWarningWhenNumberOutsideOfRange": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Whether to show warning that number is outside of the supported range of numbers (currentlly signed 128 bit int / i128)"
+          "markdownDescription": "Whether to show warning that number is outside of the supported range of numbers (currently signed 128 bit int / i128)"
         },
         "number-peeker.binary.splitNumbersEveryN": {
           "type": "integer",
           "default": 8,
-          "markdownDescription": "How many numbers to should be in one group, before getting splitted by space. If you don't want to split every N characters, just set this value really high, like 99999.. If you don't want to split every N characters, just set this value really high, like 99999 (and set number-peeker.binary.padding to false!). Defaults to 5"
+          "markdownDescription": "How many numbers to should be in one group, before getting split by space. If you don't want to split every N characters, just set this value really high, like 99999.. If you don't want to split every N characters, just set this value really high, like 99999 (and set number-peeker.binary.padding to false!). Defaults to 5"
         },
         "number-peeker.binary.padding": {
           "type": "boolean",
@@ -162,12 +163,12 @@
         "number-peeker.hex.showWarningWhenNumberOutsideOfRange": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Whether to show warning that number is outside of the supported range of numbers (currentlly signed 128 bit int / i128)"
+          "markdownDescription": "Whether to show warning that number is outside of the supported range of numbers (currently signed 128 bit int / i128)"
         },
         "number-peeker.hex.showUpercased": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Whether to show hexadecimal characters upercased"
+          "markdownDescription": "Whether to show hexadecimal characters uppercased"
         },
         "number-peeker.hex.trimTrailingFs": {
           "type": "boolean",
@@ -177,12 +178,12 @@
         "number-peeker.hex.prependZeroWhenPossible": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "When hex number contains only one place, prepend zero, just to make it pretier :D"
+          "markdownDescription": "When hex number contains only one place, prepend zero, just to make it prettier :D"
         },
         "number-peeker.hex.show0xBeforeHex": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Show '0x' before hex numbers, just to make it pretier :D"
+          "markdownDescription": "Show '0x' before hex numbers, just to make it prettier :D"
         },
         "number-peeker.exponential.show": {
           "type": "boolean",
@@ -197,7 +198,7 @@
         "number-peeker.exponential.showNotationLowercased": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Whether to show scientific notetion lowercased"
+          "markdownDescription": "Whether to show scientific notation lowercased"
         }
       }
     },
