@@ -2,6 +2,8 @@
 
 Hover over number in VSCode and see alternative representations
 
+![Showcase Video](./showcase.gif)
+
 ## Features
 
 - Match when hovering over
@@ -15,6 +17,12 @@ Hover over number in VSCode and see alternative representations
   - hex format
   - binary format
   - decimal exponential notaion representation format (has to be manually enabled in settings)
+
+## Recommended (biased) steps to do after installing
+
+- Enable: `number-peeker.exponential.show` and `number-peeker.match-against.exponential-numbers`
+  - While you're at it, change `number-peeker.exponential.maximumNumberOfFractionDigits` to your likings.
+  - Those are disabled by default since not that many people like it, however I find it usefull :D
 
 ## Extension settings
 
@@ -55,11 +63,11 @@ Hover over number in VSCode and see alternative representations
 
 ## Upcoming Features
 
-None, feel free to open new issue.
+Check Issues tab, or feel free to open new Issue/PR.
 
 ## Known issues
 
-None, feel free to open new issue.
+Check Issues tab, or feel free to open new Issue/PR.
 
 # Dev
 
@@ -79,8 +87,22 @@ npm install -g yo generator-code
 ## Total cleanup (make sure to have VSCode closed)
 
 ```
-npm cache clean --force && rm -rf node_modules/ .vscode-test/ out/ && npm i && npm run test
+npm cache clean --force && rm -rf node_modules/ .vscode-test/ out/ *.vsix && npm i && npm run test
 ```
+
+## Publish
+
+1. Run `./release.sh` from the project root
+2. https://marketplace.visualstudio.com/manage/publishers/tdiblik
+3. Click on the 3 dots next to the Extension name
+4. Select update
+5. Select new version from pc
+6. `git add .`
+7. `git commit -m "[Chore] Bump version to vX.X.X`
+8. `git tag vX.X.X`
+9. `git push origin master --tag`
+
+I don't plan on publishing that much, so setting up tokens and stuff just to make the release from terminal is not worth it. For help, see [official docs](https://code.visualstudio.com/api/working-with-extensions/publishing-extension).
 
 ## Notes
 

@@ -1,10 +1,14 @@
 {
   "name": "vscode-number-peeker",
-  "displayName": "VSCode number peeker",
+  "displayName": "Number peeker",
   "description": "Hover over number in VSCode and quickly see alternative representations",
   "version": "0.0.1",
   "license": "./LICENSE",
   "publisher": "TDiblik",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TDiblik/vscode-number-peeker.git"
+  },
   "author": {
     "name": "Tomáš Diblík",
     "email": "dibla.tomas@post.cz",
