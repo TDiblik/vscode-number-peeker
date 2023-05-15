@@ -69,6 +69,10 @@ Check the Issues tab, or feel free to open a new Issue/PR.
 
 Check the Issues tab, or feel free to open a new Issue/PR.
 
+## Why did I make this extension (for context :D)
+
+While playing around with bit manipulations, I always had to get the number I wanted to manipulate, convert it online to hex / binary / decimal representation, and then, finally, I could perform the desired manipulation in my head or on a piece of paper. This process was tedious and annoying, so I created this extension. Now, all I have to do is hover over the number I want, and voila! I can see a helpful representation of the number and I can get into thinking about the bit manipulations right away. This extension skips the tedious process of converting the desired number using some random online sites and embeds it right into VS Code.
+
 # Dev
 
 ## Setup
