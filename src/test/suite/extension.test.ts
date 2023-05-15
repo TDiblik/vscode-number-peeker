@@ -61,6 +61,7 @@ suite("Whole number matching", () => {
     "123LL",
     "123u8",
     "123usize",
+    'parseFloat(r_part).toString(2).replace(".", "").trim()',
   ];
   for (const success_case of success_cases) {
     const matching_provider = new NumberHoverProvider();
