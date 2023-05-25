@@ -11,7 +11,7 @@ export default class NumberHoverProvider implements vscode.HoverProvider {
   // For easier development (smaller headache): https://regex101.com/
   // I DARE ANYBODY TO OPEN ISSUE ABOUT MATCHING xd
   public whole_number_matcher = new NumberMatcher(
-    /(?<=[ ]|\[|\(|\{|^|\"|\'|\`)(\-)?\b(?!\_)(\d|(\_(?!\_)))+(l|L|u|U|n|u8|u16|u32|u64|u128|usize|i8|i16|i32|i64|i128|isize)*?\b(?<!\_)/gim
+    /(?<=[ ]|\[|\(|\{|^|\"|\'|\`|\.\.)(\-)?\b(?!\_)(\d|(\_(?!\_)))+(l|L|u|U|n|u8|u16|u32|u64|u128|usize|i8|i16|i32|i64|i128|isize)*?\b(?<!\_)/gim
   );
   public decimal_number_matcher = new NumberMatcher(
     /(?<=[ ]|\[|\(|\{|^|\"|\'|\`)(\-)?(\b(?!\_)(\d|(\_(?!\_)))*\.(?!\_)(\d|(\_(?!\_)))*(f|F)?\b|\.\d+(?!\.)(?!\_)|\d+\.(?!\.)(?!\_))(?<!\_)/gim

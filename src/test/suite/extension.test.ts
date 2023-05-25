@@ -62,6 +62,7 @@ suite("Whole number matching", () => {
     "123u8",
     "123usize",
     'parseFloat(r_part).toString(2).replace(".", "").trim()',
+    "..50", // Rust's for i in 0..50 and ranges in general.
   ];
   for (const success_case of success_cases) {
     const matching_provider = new NumberHoverProvider();
