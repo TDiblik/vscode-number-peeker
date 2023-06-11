@@ -83,7 +83,11 @@ export class NumberMatcher {
     }
     matched_text = matched_text.replace(/\_/gim, "");
 
-    if (matched_text.includes("e") || matched_text.includes("E")) {
+    if (
+      (matched_text.includes("e") || matched_text.includes("E")) &&
+      !matched_text.includes("0x") &&
+      !matched_text.includes("0X")
+    ) {
       this.value = BigInt(
         parseFloat(matched_text)
           .toString()
