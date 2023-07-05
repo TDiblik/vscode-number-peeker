@@ -100,7 +100,7 @@ npm cache clean --force && rm -rf node_modules/ .vscode-test/ out/ *.vsix && npm
 4. Select update
 5. Select new version from pc
 6. `git add .`
-7. `git commit -m "[Chore] Bump version to vX.X.X`
+7. `git commit -m "[Chore] Bump version to vX.X.X"`
 8. `git tag vX.X.X`
 9. `git push origin master --tag`
 10. Create new release and drop the generated .vsix inside of it.
